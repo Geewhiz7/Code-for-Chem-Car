@@ -1,4 +1,5 @@
 // CW1: FLASH CONFIGURATION WORD 1 (see PIC24 Family Reference Manual 24.1)
+#include <xc.h>
 #pragma config ICS = PGx1          // Comm Channel Select (Emulator EMUC1/EMUD1 pins are shared with PGC1/PGD1)
 #pragma config FWDTEN = OFF        // Watchdog Timer Enable (Watchdog Timer is disabled)
 #pragma config GWRP = OFF          // General Code Segment Write Protect (Writes to program memory are allowed)
@@ -17,7 +18,16 @@
 void setup(void)
 {
     CLKDIVbits.RCDIV = 0;  //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+    float LightData = 0.0;
+    float TempData = 0.0;
+    
+     // Configure RB12 as a digital output for MOSFET gate
+    TRISBbits.TRISB12 = 0;
+    LATBbits.LATB12 = 0;    // Start with MOSFET OFF
 
+    // Configure RA0/AN0 as an analog input for photocell
+    TRISAbits.TRISA0 = 1;
+    AD1PCFGbits.PCFG0 = 0;  // AN0 is analog
 }
 
 int main(void)
